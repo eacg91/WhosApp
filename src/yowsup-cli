@@ -36,6 +36,7 @@ from Examples.ListenerClient import WhatsappListenerClient
 from Examples.GroupListenerClient import WhatsappGroupListenerClient
 #from Examples.GetAllGroupsClient import GetAllGroupsClient
 from Examples.UploaderClient import UploaderClient
+from Examples.ListenerClientJSON import WhatsappListenerClientJSON
 from Yowsup.Registration.v2.existsrequest import WAExistsRequest as WAExistsRequestV2
 from Yowsup.Registration.v2.coderequest import WACodeRequest as WACodeRequestV2
 from Yowsup.Registration.v2.regrequest import WARegRequest as WARegRequestV2
@@ -174,6 +175,7 @@ modes = clientsGroup.add_mutually_exclusive_group()
 modes.add_argument('-l','--listen', help='Listen to messages', action="store_true", required=False, default=False)
 modes.add_argument('-s','--send', help="Send message to phone number and close connection. Phone is full number including country code, without '+' or '00'", action="store",  nargs=2, metavar=('<phone>','<message>'), required=False)
 modes.add_argument('-p','--sendImage', help="Send image to phone number and close connection. Phone is full number including country code, without '+' or '00'", action="store",  nargs=2, metavar=('<phone>','<image path>'), required=False)
+modes.add_argument('-j','--listenjson', help='Listen to messages and output JSON', action="store_true", required=False, default=False)
 modes.add_argument('-i','--interactive', help="Start an interactive conversation with a contact. Phone is full number including country code, without '+' or '00'", action="store", metavar='<phone>', required=False)
 modes.add_argument('-b','--broadcast', help="Broadcast message to multiple recepients, comma seperated", action="store", nargs=2, metavar=('<jids>', '<message>'), required=False)
 modes.add_argument('-g','--getGroups', help="Get the JIDs of all groups", action="store_true", required=False)
@@ -259,7 +261,11 @@ else:
 			wa = WhatsappGroupListenerClient(args['keepalive'], args['autoack'])
 
 			wa.login(login, password)
-			
+
+		elif args['listenjson']:
+			wa = WhatsappListenerClientJSON(args['keepalive'], args['autoack'])
+			wa.login(login, password)
+
 		elif args['broadcast']:
 			
 			phones = args["broadcast"][0]
