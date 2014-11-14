@@ -36,6 +36,8 @@ from Examples.ListenerClient import WhatsappListenerClient
 from Examples.GroupListenerClient import WhatsappGroupListenerClient
 #from Examples.GetAllGroupsClient import GetAllGroupsClient
 from Examples.UploaderClient import UploaderClient
+from Examples.AudioUploaderClient import AudioUploaderClient
+from Examples.VideoUploaderClient import VideoUploaderClient
 from Examples.ListenerClientJSON import WhatsappListenerClientJSON
 from Yowsup.Registration.v2.existsrequest import WAExistsRequest as WAExistsRequestV2
 from Yowsup.Registration.v2.coderequest import WACodeRequest as WACodeRequestV2
@@ -176,6 +178,10 @@ modes.add_argument('-l','--listen', help='Listen to messages', action="store_tru
 modes.add_argument('-s','--send', help="Send message to phone number and close connection. Phone is full number including country code, without '+' or '00'", action="store",  nargs=2, metavar=('<phone>','<message>'), required=False)
 modes.add_argument('-p','--sendImage', help="Send image to phone number and close connection. Phone is full number including country code, without '+' or '00'", action="store",  nargs=2, metavar=('<phone>','<image path>'), required=False)
 modes.add_argument('-j','--listenjson', help='Listen to messages and output JSON', action="store_true", required=False, default=False)
+modes.add_argument('-q','--sendAudio', help="Send audio to phone number and close connection. Phone is full number including country code, without '+' or '00'", action="store",  nargs=2, metavar=('<phone>','<audio path>'), required=False)
+modes.add_argument('-t','--sendVideo', help="Send video to phone number and close connection. Phone is full number including country code, without '+' or '00'", action="store",  nargs=2, metavar=('<phone>','<video path>'), required=False)
+modes.add_argument('-sl','--sendLocation', help="Send location to phone number and close connection. Phone is full number including country code, without '+' or '00'", action="store",  nargs=4, metavar=('<phone>','<image path>','<longitude>','<latitude>'), required=False)
+modes.add_argument('-z','--getGroup', help="Get the info for a group identified by JID", action="store", nargs=1, metavar=('<jid>'), required=False)
 modes.add_argument('-i','--interactive', help="Start an interactive conversation with a contact. Phone is full number including country code, without '+' or '00'", action="store", metavar='<phone>', required=False)
 modes.add_argument('-b','--broadcast', help="Broadcast message to multiple recepients, comma seperated", action="store", nargs=2, metavar=('<jids>', '<message>'), required=False)
 modes.add_argument('-g','--getGroups', help="Get the JIDs of all groups", action="store_true", required=False)
@@ -317,6 +323,16 @@ else:
 			phone = args["sendImage"][0]
 			imagePath = args["sendImage"][1]
 			wa = UploaderClient(phone, imagePath, args['wait'])
+			wa.login(login, password)
+		elif args["sendAudio"]:
+			phone = args["sendAudio"][0]
+			audioPath = args["sendAudio"][1]
+			wa = AudioUploaderClient(phone, audioPath, args['wait'])
+			wa.login(login, password)
+		elif args["sendVideo"]:
+			phone = args["sendVideo"][0]
+			audioPath = args["sendVideo"][1]
+			wa = VideoUploaderClient(phone, audioPath, args['wait'])
 			wa.login(login, password)
 
 	elif args["dbus"]:

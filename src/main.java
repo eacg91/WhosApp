@@ -200,10 +200,11 @@ public class main {
 				System.out.println(" 2. Enviar mensaje de texto");
 				System.out.println(" 3. Leer mensajes de texto");
 				System.out.println(" 4. Enviar una imagen");
-				System.out.println(" 5. Enviar un video ***");
-				System.out.println(" 6. Configurar Remitente");
+				System.out.println(" 5. Enviar un video (.mp4)");
+				System.out.println(" 6. Enviar un sonido (.mp3|.wav)");
+				System.out.println(" 7. Configurar Remitente");
 				//System.out.println(" *. Agenda local de Destinatarios");	//nuevo menu para Agregar o Borrar destinatarios elegibles
-				System.out.println(" 7. Configurar Destinatarios");
+				System.out.println(" 8. Configurar Destinatarios");
 				System.out.print("\t Tu respuesta es: ");
 				opcion = Leer.nextInt();
 				switch(opcion){
@@ -247,13 +248,26 @@ public class main {
 						try{
 							mensaje = EligeArchivo();
 							antiBug_Path(mensaje);
-							bash("python yowsup-cli -c config."+miNumero+" -p "+claveNacional+telefonoD+" "+antiBug_Path(mensaje) );
+							bash("python yowsup-cli -c config."+miNumero+" -t "+claveNacional+telefonoD+" "+antiBug_Path(mensaje) );
 						}catch(Exception e){
 							System.out.println("\n Envio de Archivo Video fue Cancelado ");
 						}
 						break;
 					case 6:
-						System.out.println("\t CONFIGURACION de REMITENTE");
+						System.out.println("\t ENVIAR un Archivo de SONIDO");
+						if(telefonoD.equals("x"))
+							telefonoD = EstableceNumero("destinatario");
+						System.out.print(" Se abrira una ventana para que seleccione el archivo mp3 o wav que desea enviar. Por favor, espere. ");
+						try{
+							mensaje = EligeArchivo();
+							antiBug_Path(mensaje);
+							bash("python yowsup-cli -c config."+miNumero+" -q "+claveNacional+telefonoD+" "+antiBug_Path(mensaje) );
+						}catch(Exception e){
+							System.out.println("\n Envio de Archivo Sonido fue Cancelado ");
+						}
+						break;
+					case 7:
+						System.out.println("\t CAMBIAR de REMITENTE");
 						//nuevo menu para seleccionar remitente existente en config.numero u ofrecer alta de nuevo remitente
 						//1. cambiar de numero remitente
 						miNumero = EstableceNumero("REMITENTE");
@@ -261,8 +275,8 @@ public class main {
 						//x. Mismo REMITENTE para todos los envios (hasta volver a configurar otro REMITENTE o cerrar el programa)
 						//x. Asignar un Alias a numero REMITENTE
 						break;
-					case 7:
-						System.out.println("\t CONFIGURACION de DESTINATARIO");
+					case 8:
+						System.out.println("\t CAMBIAR de DESTINATARIO");
 							//nuevo menu para elegir de agenda o usar sin agenda
 						telefonoD = EstableceNumero("DESTINATARIO");
 						//x. Establecer diferente DESTINATARIO para cada envio
