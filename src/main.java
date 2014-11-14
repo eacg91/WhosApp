@@ -2,6 +2,7 @@
 import java.util.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 
 public class main {
 	Scanner Leer=new Scanner(System.in);
@@ -31,8 +32,19 @@ public class main {
 		}
 	}
 	
-	public static String EligeArchivo(){
-        JFileChooser ArchivoSeleccion = new JFileChooser();
+	public static String EligeArchivo(String tipo){
+		JFileChooser ArchivoSeleccion = new JFileChooser();
+		FileNameExtensionFilter filtro;
+		if(tipo.equals("imagen")){
+			filtro = new FileNameExtensionFilter(".jpg, .png, .gif","JPG","PNG","GIF","jpg","png","gif");
+			ArchivoSeleccion.setFileFilter(filtro);
+		}else if(tipo.equals("sonido")){
+			filtro = new FileNameExtensionFilter(".mp3, .wav","MP3","WAV","mp3","wav");
+			ArchivoSeleccion.setFileFilter(filtro);
+		}else if(tipo.equals("video")){
+			filtro = new FileNameExtensionFilter(".mp4","MP4","mp4");
+			ArchivoSeleccion.setFileFilter(filtro);
+        }
         ArchivoSeleccion.showOpenDialog(ArchivoSeleccion);
         String path= ArchivoSeleccion.getSelectedFile().getAbsolutePath();
         System.out.println("\n "+path); 
@@ -234,7 +246,7 @@ public class main {
 							telefonoD = EstableceNumero("destinatario");
 						System.out.print(" Se abrira una ventana para que seleccione la imagen que desea enviar. Por favor, espere. ");
 						try{
-							mensaje = EligeArchivo();
+							mensaje = EligeArchivo("imagen");
 							bash("python yowsup-cli -c config."+miNumero+" -p "+claveNacional+telefonoD+" "+antiBug_Path(mensaje) );
 						}catch(Exception e){
 							System.out.println("\n Envio de Archivo Imagen fue Cancelado ");
@@ -246,7 +258,7 @@ public class main {
 							telefonoD = EstableceNumero("destinatario");
 						System.out.print(" Se abrira una ventana para que seleccione el video que desea enviar. Por favor, espere. ");
 						try{
-							mensaje = EligeArchivo();
+							mensaje = EligeArchivo("video");
 							antiBug_Path(mensaje);
 							bash("python yowsup-cli -c config."+miNumero+" -t "+claveNacional+telefonoD+" "+antiBug_Path(mensaje) );
 						}catch(Exception e){
@@ -259,7 +271,7 @@ public class main {
 							telefonoD = EstableceNumero("destinatario");
 						System.out.print(" Se abrira una ventana para que seleccione el archivo mp3 o wav que desea enviar. Por favor, espere. ");
 						try{
-							mensaje = EligeArchivo();
+							mensaje = EligeArchivo("sonido");
 							antiBug_Path(mensaje);
 							bash("python yowsup-cli -c config."+miNumero+" -q "+claveNacional+telefonoD+" "+antiBug_Path(mensaje) );
 						}catch(Exception e){
